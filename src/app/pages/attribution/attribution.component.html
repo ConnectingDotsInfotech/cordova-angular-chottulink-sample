@@ -1,0 +1,39 @@
+@for (action of actions; track action.key) {
+  <section class="card">
+    <h2><code>{{ action.title }}</code></h2>
+    <p class="muted">{{ action.description }}</p>
+
+    @if (action.json !== null) {
+      <textarea
+        class="code code-input"
+        rows="8"
+        spellcheck="false"
+        autocapitalize="none"
+        autocomplete="off"
+        [(ngModel)]="action.json"
+        [attr.aria-label]="action.title + ' JSON payload'"
+      ></textarea>
+      <div class="row row-tight">
+        <button type="button" class="btn btn-secondary" (click)="format(action)">Format</button>
+        <button type="button" class="btn btn-secondary" (click)="copy(action)">
+          {{ copiedKey === action.key + ':input' ? 'Copied!' : 'Copy' }}
+        </button>
+        <button type="button" class="btn btn-secondary" (click)="reset(action)">Reset</button>
+      </div>
+    }
+
+    <button type="button" class="btn btn-primary" [disabled]="action.busy" (click)="execute(action)">
+      {{ action.busy ? 'Sending…' : 'Run ' + action.title }}
+    </button>
+
+    @if (action.error) {
+      <p class="error">{{ action.error }}</p>
+    }
+    @if (action.result) {
+      <pre class="code">{{ action.result }}</pre>
+      <button type="button" class="btn btn-secondary" (click)="copy(action, true)">
+        {{ copiedKey === action.key + ':result' ? 'Copied!' : 'Copy result' }}
+      </button>
+    }
+  </section>
+}

@@ -1,0 +1,24 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>ChottuLink Sample</title>
+  <base href="/">
+  <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+  <meta name="color-scheme" content="light dark">
+  <meta http-equiv="Content-Security-Policy" content="default-src * 'self' 'unsafe-inline' 'unsafe-eval' data: gap: https://ssl.gstatic.com; style-src * 'self' 'unsafe-inline'; media-src *; img-src * data: content:;">
+  <link rel="icon" type="image/x-icon" href="favicon.ico">
+</head>
+<body>
+  <app-root></app-root>
+  <!--
+    Required on-device: cordova-ios / cordova-android only create `window.cordova`
+    (and wire up the plugin bridge) once this script actually runs - it is not
+    auto-injected by the native layer. `cordova.js` is generated into `www/` by
+    Cordova's own prepare step (see package.json's cordova:prepare script), so
+    this 404s harmlessly in a plain browser tab (`ng serve`) where there is no
+    Cordova runtime at all.
+  -->
+  <script src="cordova.js"></script>
+</body>
+</html>

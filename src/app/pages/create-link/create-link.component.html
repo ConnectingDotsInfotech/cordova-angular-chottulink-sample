@@ -1,0 +1,140 @@
+<form class="card" [formGroup]="form" (ngSubmit)="createLink()" novalidate>
+  <h2>Create dynamic link</h2>
+
+  <label class="field">
+    <span>Destination URL *</span>
+    <input type="url" formControlName="destinationURL" placeholder="https://example.com/product/123" />
+    @if (showError('destinationURL')) {
+      <small class="error">
+        {{ form.controls.destinationURL.hasError('required') ? 'Destination URL is required.' : 'Enter a valid http(s) URL.' }}
+      </small>
+    }
+  </label>
+
+  <label class="field">
+    <span>Domain *</span>
+    <input type="text" formControlName="domain" placeholder="myapp.chottu.link" autocapitalize="none" />
+    @if (showError('domain')) {
+      <small class="error">
+        {{ form.controls.domain.hasError('required') ? 'Domain is required.' : 'Use a bare domain, e.g. myapp.chottu.link' }}
+      </small>
+    }
+  </label>
+
+  <label class="field">
+    <span>Link name</span>
+    <input type="text" formControlName="linkName" />
+  </label>
+
+  <div class="row">
+    <label class="field">
+      <span>Android behaviour</span>
+      <select formControlName="androidBehaviour">
+        <option [ngValue]="DynamicLinkBehaviour.APP">Open in app</option>
+        <option [ngValue]="DynamicLinkBehaviour.BROWSER">Open in browser</option>
+      </select>
+    </label>
+    <label class="field">
+      <span>iOS behaviour</span>
+      <select formControlName="iosBehaviour">
+        <option [ngValue]="DynamicLinkBehaviour.APP">Open in app</option>
+        <option [ngValue]="DynamicLinkBehaviour.BROWSER">Open in browser</option>
+      </select>
+    </label>
+  </div>
+
+  <label class="field">
+    <span>Selected path</span>
+    <input type="text" formControlName="selectedPath" placeholder="optional custom path" />
+  </label>
+
+  <h3>Social preview</h3>
+  <label class="field">
+    <span>Title</span>
+    <input type="text" formControlName="socialTitle" />
+  </label>
+  <label class="field">
+    <span>Description</span>
+    <textarea rows="2" formControlName="socialDescription"></textarea>
+  </label>
+  <label class="field">
+    <span>Image URL</span>
+    <input type="url" formControlName="socialImageUrl" />
+    @if (showError('socialImageUrl')) {
+      <small class="error">Enter a valid http(s) URL.</small>
+    }
+  </label>
+
+  <h3>UTM parameters</h3>
+  <div class="row">
+    <label class="field">
+      <span>Source</span>
+      <input type="text" formControlName="utmSource" />
+    </label>
+    <label class="field">
+      <span>Medium</span>
+      <input type="text" formControlName="utmMedium" />
+    </label>
+  </div>
+  <label class="field">
+    <span>Campaign</span>
+    <input type="text" formControlName="utmCampaign" />
+  </label>
+  <div class="row">
+    <label class="field">
+      <span>Content</span>
+      <input type="text" formControlName="utmContent" />
+    </label>
+    <label class="field">
+      <span>Term</span>
+      <input type="text" formControlName="utmTerm" />
+    </label>
+  </div>
+
+  <button type="submit" class="btn btn-primary" [disabled]="spinner">
+    {{ spinner ? 'Creating…' : 'Create link' }}
+  </button>
+</form>
+
+@if (error) {
+  <div class="card card-danger">{{ error }}</div>
+}
+
+@if (shortUrl) {
+  <div class="card card-success">
+    <h3>Created link</h3>
+    <p class="link-output">{{ shortUrl }}</p>
+    <button type="button" class="btn btn-secondary" (click)="copyShortUrl()">
+      {{ copied ? 'Copied!' : 'Copy link' }}
+    </button>
+
+    <h3>appLinkData</h3>
+    @if (appLinkDataSpinner) {
+      <p class="muted">Resolving…</p>
+    }
+    @if (appLinkDataError) {
+      <p class="error">{{ appLinkDataError }}</p>
+    }
+    @if (appLinkData) {
+      <pre class="code">{{ prettyJson(appLinkData) }}</pre>
+    }
+  </div>
+}
+
+<section class="card">
+  <h2>Resolve a short link</h2>
+  <p class="muted">Calls <code>getAppLinkDataFromUrl</code> for any ChottuLink short URL.</p>
+  <label class="field">
+    <span>Short URL</span>
+    <input type="url" [value]="resolveInput" (input)="resolveInput = $any($event.target).value" placeholder="https://myapp.chottu.link/abc123" />
+  </label>
+  <button type="button" class="btn btn-primary" [disabled]="resolveSpinner" (click)="resolveLink()">
+    {{ resolveSpinner ? 'Resolving…' : 'Resolve' }}
+  </button>
+  @if (resolveError) {
+    <p class="error">{{ resolveError }}</p>
+  }
+  @if (resolveResult) {
+    <pre class="code">{{ prettyJson(resolveResult) }}</pre>
+  }
+</section>

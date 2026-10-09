@@ -1,0 +1,38 @@
+<div class="toolbar">
+  <span class="muted">{{ visibleEntries.length }} event(s)</span>
+  <button type="button" class="btn btn-secondary" (click)="eventLog.clear()">Clear</button>
+</div>
+
+<div class="chips">
+  @for (type of logTypes; track type) {
+    <button
+      type="button"
+      class="chip"
+      [class.chip-active]="activeFilter === type"
+      (click)="toggleFilter(type)"
+    >
+      {{ type }}
+    </button>
+  }
+</div>
+
+@for (entry of visibleEntries; track entry.id) {
+  <article class="card">
+    <div class="entry-head">
+      <span [class]="'badge ' + badgeClass(entry.type)">{{ entry.type }}</span>
+      <span class="muted">{{ entry.timestamp | date: 'HH:mm:ss.SSS' }}</span>
+    </div>
+    <p class="entry-title">{{ entry.title }}</p>
+    @if (entry.payload !== null) {
+      <details>
+        <summary>Payload</summary>
+        <pre class="code">{{ prettyJson(entry.payload) }}</pre>
+        <button type="button" class="btn btn-secondary" (click)="copyPayload(entry)">
+          {{ copiedId === entry.id ? 'Copied!' : 'Copy JSON' }}
+        </button>
+      </details>
+    }
+  </article>
+} @empty {
+  <p class="empty">No events yet. Open a ChottuLink URL or use the other tabs.</p>
+}

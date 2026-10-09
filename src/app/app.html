@@ -1,0 +1,25 @@
+<header class="app-header">
+  <h1>ChottuLink Sample</h1>
+</header>
+
+<main class="app-content">
+  <router-outlet />
+</main>
+
+<nav class="tab-bar">
+  <a [routerLink]="['/', AppRoutes.EVENTS]" routerLinkActive="active">
+    <span class="tab-icon">📡</span>
+    <span>Events</span>
+    @if (eventLog.entries().length) {
+      <span class="tab-badge">{{ eventLog.entries().length }}</span>
+    }
+  </a>
+  <a [routerLink]="['/', AppRoutes.CREATE_LINK]" routerLinkActive="active">
+    <span class="tab-icon">🔗</span>
+    <span>Create link</span>
+  </a>
+  <a [routerLink]="['/', AppRoutes.ATTRIBUTION]" routerLinkActive="active">
+    <span class="tab-icon">📊</span>
+    <span>Attribution</span>
+  </a>
+</nav>
